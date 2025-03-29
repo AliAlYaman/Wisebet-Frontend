@@ -24,7 +24,7 @@ interface TabsListProps {
 
 const TabsList: React.FC<TabsListProps> = ({ className, children }) => {
   return (
-    <div className={`bg-background flex rounded-md p-1 ${className}`}>
+    <div className={`bg-gray-800 flex rounded-md p-1 ${className}`}>
       {children}
     </div>
   );
@@ -38,7 +38,7 @@ interface TabsTriggerProps {
 const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children }) => {
   return (
     <button 
-      className="px-3 py-1.5 text-sm font-medium rounded-md data-[state=active]:bg-betting data-[state=active]:text-betting-foreground transition-colors"
+      className="px-3 py-1.5 text-sm font-medium rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white transition-colors text-gray-300 hover:text-white cursor-pointer"
       data-state="inactive"
     >
       {children}
@@ -50,19 +50,19 @@ const LiveEvents = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold flex items-center gap-2">
+        <h2 className="text-xl font-bold text-white flex items-center gap-2">
           <div className="flex items-center">
-            <span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1 animate-pulse-opacity"></span>
+            <span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1 animate-pulse"></span>
             <span>Live Events</span>
           </div>
         </h2>
-        <CustomButton variant="link" className="text-betting flex items-center gap-1">
+        <CustomButton variant="link" className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
           View All <ArrowRightIcon className="h-4 w-4" />
         </CustomButton>
       </div>
       
       <Tabs defaultValue="all" className="w-full">
-        <TabsList className="bg-background">
+        <TabsList className="bg-gray-800">
           <TabsTrigger value="all">All</TabsTrigger>
           <TabsTrigger value="football">Football</TabsTrigger>
           <TabsTrigger value="basketball">Basketball</TabsTrigger>
@@ -79,8 +79,6 @@ const LiveEvents = () => {
           awayScore={1}
           time="64'"
           league="Premier League"
-          homeLogo="/placeholder.svg"
-          awayLogo="/placeholder.svg"
         />
         
         <LiveEventCard 
@@ -90,8 +88,6 @@ const LiveEvents = () => {
           awayScore={2}
           time="78'"
           league="Bundesliga"
-          homeLogo="/placeholder.svg"
-          awayLogo="/placeholder.svg"
         />
         
         <LiveEventCard 
@@ -101,8 +97,6 @@ const LiveEvents = () => {
           awayScore={82}
           time="Q3 8:24"
           league="NBA"
-          homeLogo="/placeholder.svg"
-          awayLogo="/placeholder.svg"
           isBasketball={true}
         />
       </div>
@@ -117,8 +111,6 @@ interface LiveEventCardProps {
   awayScore: number;
   time: string;
   league: string;
-  homeLogo: string;
-  awayLogo: string;
   isBasketball?: boolean;
 }
 
@@ -129,72 +121,64 @@ const LiveEventCard = ({
   awayScore,
   time,
   league,
-  homeLogo,
-  awayLogo,
   isBasketball = false,
 }: LiveEventCardProps) => {
   return (
-    <CustomCard className="overflow-hidden">
+    <CustomCard className="overflow-hidden bg-gray-800 border-gray-700">
       <div className="p-4">
         <div className="flex justify-between items-center mb-3">
-          <span className="text-xs text-muted-foreground">{league}</span>
+          <span className="text-xs text-gray-400">{league}</span>
           <div className="flex items-center">
             <div className="flex items-center">
-              <span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1 animate-pulse-opacity"></span>
+              <span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1 animate-pulse"></span>
               <span className="text-xs text-red-500 font-medium">LIVE</span>
             </div>
-            <span className="text-xs text-muted-foreground ml-2">{time}</span>
+            <span className="text-xs text-gray-400 ml-2">{time}</span>
           </div>
         </div>
         
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <div className="bg-secondary rounded-full w-8 h-8 flex items-center justify-center mr-2">
-              <img src={homeLogo} alt={homeTeam} className="w-4 h-4" />
-            </div>
-            <span className="font-medium">{homeTeam}</span>
+            <span className="font-medium text-white">{homeTeam}</span>
           </div>
-          <span className="text-xl font-bold">{homeScore}</span>
+          <span className="text-xl font-bold text-white">{homeScore}</span>
         </div>
         
         <div className="flex justify-between items-center mt-2">
           <div className="flex items-center">
-            <div className="bg-secondary rounded-full w-8 h-8 flex items-center justify-center mr-2">
-              <img src={awayLogo} alt={awayTeam} className="w-4 h-4" />
-            </div>
-            <span className="font-medium">{awayTeam}</span>
+            <span className="font-medium text-white">{awayTeam}</span>
           </div>
-          <span className="text-xl font-bold">{awayScore}</span>
+          <span className="text-xl font-bold text-white">{awayScore}</span>
         </div>
         
         <CustomCardContent className="p-0 mt-4">
           <div className="grid grid-cols-3 gap-2">
-            <CustomButton 
+          <CustomButton 
               variant="outline" 
-              className="h-10 flex flex-col items-center justify-center gap-1 hover:border-betting hover:text-betting"
+              className="h-12 flex flex-col items-center justify-center gap-1 hover:bg-indigo-600 hover:border-indigo-600 hover:text-white border-gray-700 transition-all"
             >
-              <span className="font-bold">1.95</span>
-              <span className="text-xs text-muted-foreground">1</span>
+              <span className="font-bold text-white group-hover:text-white">1.95</span>
+              <span className="text-xs text-gray-400 group-hover:text-white/80">1</span>
             </CustomButton>
             
             <CustomButton 
               variant="outline" 
-              className="h-10 flex flex-col items-center justify-center gap-1 hover:border-betting hover:text-betting"
+              className="h-12 flex flex-col items-center justify-center gap-1 hover:bg-indigo-600 hover:border-indigo-600 hover:text-white border-gray-700 transition-all"
             >
-              <span className="font-bold">3.40</span>
-              <span className="text-xs text-muted-foreground">X</span>
+              <span className="font-bold text-white group-hover:text-white">3.40</span>
+              <span className="text-xs text-gray-400 group-hover:text-white/80">X</span>
             </CustomButton>
             
             <CustomButton 
               variant="outline" 
-              className="h-10 flex flex-col items-center justify-center gap-1 hover:border-betting hover:text-betting"
+              className="h-12 flex flex-col items-center justify-center gap-1 hover:bg-indigo-600 hover:border-indigo-600 hover:text-white border-gray-700 transition-all"
             >
-              <span className="font-bold">4.20</span>
-              <span className="text-xs text-muted-foreground">2</span>
+              <span className="font-bold text-white group-hover:text-white">4.20</span>
+              <span className="text-xs text-gray-400 group-hover:text-white/80">2</span>
             </CustomButton>
           </div>
           
-          <CustomButton variant="ghost" className="w-full mt-2 text-xs text-muted-foreground hover:text-foreground">
+          <CustomButton variant="ghost" className="w-full mt-2 text-xs text-gray-500 hover:text-white">
             +{isBasketball ? 180 : 250} more markets
           </CustomButton>
         </CustomCardContent>

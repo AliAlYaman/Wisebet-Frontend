@@ -9,124 +9,118 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-background border-b border-border">
+    <header className="sticky top-0 z-50 bg-gray-900 border-b border-gray-800">
       <div className="container px-4 mx-auto">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <span className="text-2xl font-bold text-betting">WagerVerse</span>
+            <span className="text-2xl font-bold text-indigo-500">Wisebet</span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
-            <Link to="/" className="px-3 py-2 text-sm font-medium text-foreground hover:text-betting transition-colors">
+            <Link to="/" className="px-3 py-2 text-sm font-medium text-white hover:text-indigo-400 transition-colors">
               Sports
             </Link>
-            <Link to="/live" className="px-3 py-2 text-sm font-medium text-foreground hover:text-betting transition-colors">
+            <Link to="/live" className="px-3 py-2 text-sm font-medium text-white hover:text-indigo-400 transition-colors">
               Live
             </Link>
-            <Link to="/casino" className="px-3 py-2 text-sm font-medium text-foreground hover:text-betting transition-colors">
+            <Link to="/casino" className="px-3 py-2 text-sm font-medium text-white hover:text-indigo-400 transition-colors">
               Casino
             </Link>
-            <Link to="/promotions" className="px-3 py-2 text-sm font-medium text-foreground hover:text-betting transition-colors">
-              Promotions
+            <Link to="/predictions" className="px-3 py-2 text-sm font-medium text-white hover:text-indigo-400 transition-colors">
+              Predictions
             </Link>
           </nav>
 
           {/* Search and User Controls */}
           <div className="flex items-center space-x-4">
-            <div className="hidden md:flex items-center relative">
-              {/* <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input 
-                type="search" 
-                placeholder="Search..." 
-                className="pl-8 bg-secondary border-none w-40 lg:w-64 h-9 text-sm focus:outline-none"
-              /> */}
+            <div className="hidden md:flex items-center space-x-2">
+              <Link 
+                to="/login" 
+                className="px-3 py-2 text-sm font-medium text-white hover:text-indigo-400 transition-colors cursor-pointer"
+              >
+                Login
+              </Link>
+              <Link 
+                to="/register" 
+                className="px-3 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors cursor-pointer"
+              >
+                Register
+              </Link>
             </div>
             
-            {/* <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-              <Bell className="h-5 w-5" />
-            </Button>
-            
-            <Button variant="outline" className="hidden md:flex">
-              <User className="h-4 w-4 mr-2" />
-              Sign In
-            </Button>
-            
-            <Button className="hidden md:flex bg-betting hover:bg-betting-dark text-betting-foreground">
-              Register
-            </Button>
-            
             {/* Mobile menu button */}
-            {/* <Button 
-              variant="ghost" 
-              size="icon" 
-              className="md:hidden"
+            <button 
+              className="md:hidden text-gray-400 hover:text-white focus:outline-none"
               onClick={toggleMobileMenu}
             >
               {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
               ) : (
-                <Menu className="h-6 w-6" />
-              )} */}
-            {/* </Button>  */}
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
       </div>
       
       {/* Mobile Navigation Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-background border-b border-border">
+        <div className="md:hidden bg-gray-900 border-b border-gray-800">
           <div className="container px-4 py-3 mx-auto">
             <div className="flex items-center relative mb-4">
-              {/* <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input 
-                type="search" 
-                placeholder="Search..." 
-                className="pl-8 bg-secondary border-none w-full h-9 text-sm focus:outline-none"
-              /> */}
+              {/* Mobile search input would go here */}
             </div>
             
             <nav className="space-y-1 pb-3">
               <Link 
                 to="/" 
-                className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-secondary"
+                className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-800"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Sports
               </Link>
               <Link 
                 to="/live" 
-                className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-secondary"
+                className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-800"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Live
               </Link>
               <Link 
                 to="/casino" 
-                className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-secondary"
+                className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-800"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Casino
               </Link>
               <Link 
                 to="/promotions" 
-                className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-secondary"
+                className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-800"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Promotions
               </Link>
-            </nav>
-            
-            <div className="flex space-x-2 pb-4">
-              {/* <Button variant="outline" className="w-1/2">
-                <User className="h-4 w-4 mr-2" />
-                Sign In
-              </Button>
-              <Button className="w-1/2 bg-betting hover:bg-betting-dark text-betting-foreground">
+              <Link 
+                to="/login" 
+                className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-800"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Login
+              </Link>
+              <Link 
+                to="/register" 
+                className="block px-3 py-2 rounded-md text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 Register
-              </Button> */}
-            </div>
+              </Link>
+            </nav>
           </div>
         </div>
       )}

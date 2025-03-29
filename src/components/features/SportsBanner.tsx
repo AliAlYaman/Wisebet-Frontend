@@ -24,18 +24,21 @@ const CustomTabs = ({ value, onValueChange, children, className }: any) => {
 
 const CustomTabsList = ({ children, className }: any) => {
   return (
-    <div className={`bg-card flex rounded-md p-1 ${className}`}>
+    <div className={`bg-gray-800 flex rounded-md p-1 ${className}`}>
       {children}
     </div>
   );
 };
 
-const CustomTabsTrigger = ({ value, children, onClick }: any) => {
+const CustomTabsTrigger = ({ value, children, onClick, activeValue }: any) => {
   return (
     <button 
       onClick={() => onClick(value)}
-      className="px-3 py-1.5 text-sm font-medium rounded-md data-[state=active]:bg-betting data-[state=active]:text-betting-foreground transition-colors"
-      data-state={value === onClick.activeValue ? "active" : "inactive"}
+      className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors cursor-pointer ${
+        value === activeValue 
+          ? "bg-indigo-600 text-white" 
+          : "text-gray-300 hover:text-white"
+      }`}
     >
       {children}
     </button>
@@ -67,17 +70,35 @@ const SportsBanner = () => {
   const [activeTab, setActiveTab] = useState("all");
   
   return (
-    <div className="bg-background border-b border-border">
+    <div className="bg-gray-900 border-b border-gray-800">
       <div className="container mx-auto px-4 py-4">
         <CustomTabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <div className="flex justify-between items-center mb-4">
-            <CustomTabsList className="bg-card">
-              <CustomTabsTrigger value="all" onClick={(val: string) => { setActiveTab(val); }} activeValue={activeTab}>All Sports</CustomTabsTrigger>
-              <CustomTabsTrigger value="live" onClick={(val: string) => { setActiveTab(val); }} activeValue={activeTab}>Live Now</CustomTabsTrigger>
-              <CustomTabsTrigger value="upcoming" onClick={(val: string) => { setActiveTab(val); }} activeValue={activeTab}>Upcoming</CustomTabsTrigger>
+            <CustomTabsList className="bg-gray-800">
+              <CustomTabsTrigger 
+                value="all" 
+                onClick={(val: string) => setActiveTab(val)} 
+                activeValue={activeTab}
+              >
+                All Sports
+              </CustomTabsTrigger>
+              <CustomTabsTrigger 
+                value="live" 
+                onClick={(val: string) => setActiveTab(val)} 
+                activeValue={activeTab}
+              >
+                Live Now
+              </CustomTabsTrigger>
+              <CustomTabsTrigger 
+                value="upcoming" 
+                onClick={(val: string) => setActiveTab(val)} 
+                activeValue={activeTab}
+              >
+                Upcoming
+              </CustomTabsTrigger>
             </CustomTabsList>
             
-            <CustomButton variant="ghost" size="sm" className="text-xs gap-1">
+            <CustomButton variant="ghost" size="sm" className="text-xs gap-1 text-gray-400 hover:text-white">
               See All <ChevronRightIcon className="h-3 w-3" />
             </CustomButton>
           </div>
@@ -88,10 +109,10 @@ const SportsBanner = () => {
                 <CustomButton 
                   key={sport.name}
                   variant="outline" 
-                  className="flex flex-col items-center justify-center h-20 border border-border bg-card hover:bg-card/80"
+                  className="flex flex-col items-center justify-center h-20 border border-gray-700 bg-gray-800 hover:bg-gray-700"
                 >
-                  <sport.icon className="h-6 w-6 mb-2" />
-                  <span className="text-xs">{sport.name}</span>
+                  <sport.icon className="h-6 w-6 mb-2 text-white" />
+                  <span className="text-xs text-white">{sport.name}</span>
                 </CustomButton>
               ))}
             </div>
@@ -103,10 +124,10 @@ const SportsBanner = () => {
                 <CustomButton 
                   key={sport.name}
                   variant="outline" 
-                  className="flex flex-col items-center justify-center h-20 border border-border bg-card hover:bg-card/80"
+                  className="flex flex-col items-center justify-center h-20 border border-gray-700 bg-gray-800 hover:bg-gray-700"
                 >
-                  <sport.icon className="h-6 w-6 mb-2" />
-                  <span className="text-xs">{sport.name}</span>
+                  <sport.icon className="h-6 w-6 mb-2 text-white" />
+                  <span className="text-xs text-white">{sport.name}</span>
                 </CustomButton>
               ))}
             </div>
@@ -118,10 +139,10 @@ const SportsBanner = () => {
                 <CustomButton 
                   key={sport.name}
                   variant="outline" 
-                  className="flex flex-col items-center justify-center h-20 border border-border bg-card hover:bg-card/80"
+                  className="flex flex-col items-center justify-center h-20 border border-gray-700 bg-gray-800 hover:bg-gray-700"
                 >
-                  <sport.icon className="h-6 w-6 mb-2" />
-                  <span className="text-xs">{sport.name}</span>
+                  <sport.icon className="h-6 w-6 mb-2 text-white" />
+                  <span className="text-xs text-white">{sport.name}</span>
                 </CustomButton>
               ))}
             </div>

@@ -14,7 +14,7 @@ const Button: React.FC<ButtonProps> = ({
   const baseStyles = "px-4 py-2 rounded-md font-medium transition-colors duration-200 text-sm inline-flex items-center justify-center";
   
   const variantStyles = {
-    default: "bg-white hover:bg-gray-100 text-betting-dark",
+    default: "bg-white hover:bg-gray-100 text-gray-900",
     outline: "border border-white text-white hover:bg-white/10"
   };
   
@@ -31,7 +31,7 @@ const Button: React.FC<ButtonProps> = ({
 const PromotionBanner: React.FC = () => {
   return (
     <div className="relative rounded-lg overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-betting/80 to-betting-dark/90 z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-indigo-700/80 to-indigo-800/90 z-10"></div>
       <div 
         className="h-60 bg-cover bg-center"
         style={{ backgroundImage: "url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80')" }}

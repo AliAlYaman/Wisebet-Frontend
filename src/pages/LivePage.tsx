@@ -1,4 +1,3 @@
-
 // Custom tabs implementation
 interface TabsProps {
   defaultValue: string;
@@ -21,7 +20,7 @@ interface TabsListProps {
 
 const TabsList: React.FC<TabsListProps> = ({ className, children }) => {
   return (
-    <div className={`bg-background flex rounded-md p-1 ${className}`}>
+    <div className={`bg-gray-800 flex rounded-md p-1 ${className}`}>
       {children}
     </div>
   );
@@ -35,7 +34,7 @@ interface TabsTriggerProps {
 const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children }) => {
   return (
     <button 
-      className="px-3 py-1.5 text-sm font-medium rounded-md data-[state=active]:bg-betting data-[state=active]:text-betting-foreground transition-colors"
+      className="px-3 py-1.5 text-sm font-medium rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white transition-colors text-gray-300 hover:text-white cursor-pointer"
       data-state="inactive"
     >
       {children}
@@ -45,13 +44,13 @@ const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children }) => {
 
 const LivePage = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-900">
       <div className="container px-4 py-8 mx-auto space-y-8">
         <div>
-          <h1 className="text-3xl font-bold mb-6">Live Events</h1>
+          <h1 className="text-3xl font-bold mb-6 text-white">Live Events</h1>
           
           <Tabs defaultValue="all" className="w-full">
-            <TabsList className="bg-background">
+            <TabsList className="bg-gray-800">
               <TabsTrigger value="all">All Sports</TabsTrigger>
               <TabsTrigger value="football">Football</TabsTrigger>
               <TabsTrigger value="basketball">Basketball</TabsTrigger>
@@ -124,55 +123,55 @@ const LiveEventCard = ({ index }: LiveEventCardProps) => {
   }
   
   return (
-    <div className="bg-card rounded-lg overflow-hidden">
-      <div className="px-4 py-3 flex justify-between items-center border-b border-border">
-        <span className="text-xs text-muted-foreground">{league}</span>
+    <div className="bg-gray-800 rounded-lg overflow-hidden shadow-md border border-gray-700">
+      <div className="px-4 py-3 flex justify-between items-center border-b border-gray-700">
+        <span className="text-xs text-gray-400">{league}</span>
         <div className="flex items-center">
-          <span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1 animate-pulse-opacity"></span>
+          <span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1 animate-pulse"></span>
           <span className="text-xs text-red-500 font-medium mr-2">LIVE</span>
-          <span className="text-xs text-muted-foreground">{time}</span>
+          <span className="text-xs text-gray-400">{time}</span>
         </div>
       </div>
       
       <div className="p-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <div className="bg-secondary rounded-full w-8 h-8 flex items-center justify-center mr-2">
-              <span className="text-xs">{matchup[0].substring(0, 2)}</span>
+            <div className="bg-blue-900/30 rounded-full w-8 h-8 flex items-center justify-center mr-2">
+              <span className="text-xs text-blue-400">{matchup[0].substring(0, 2)}</span>
             </div>
-            <span className="font-medium">{matchup[0]}</span>
+            <span className="font-medium text-white">{matchup[0]}</span>
           </div>
-          <span className="text-xl font-bold">{homeScore}</span>
+          <span className="text-xl font-bold text-white">{homeScore}</span>
         </div>
         
         <div className="flex justify-between items-center mt-2">
           <div className="flex items-center">
-            <div className="bg-secondary rounded-full w-8 h-8 flex items-center justify-center mr-2">
-              <span className="text-xs">{matchup[1].substring(0, 2)}</span>
+            <div className="bg-blue-900/30 rounded-full w-8 h-8 flex items-center justify-center mr-2">
+              <span className="text-xs text-blue-400">{matchup[1].substring(0, 2)}</span>
             </div>
-            <span className="font-medium">{matchup[1]}</span>
+            <span className="font-medium text-white">{matchup[1]}</span>
           </div>
-          <span className="text-xl font-bold">{awayScore}</span>
+          <span className="text-xl font-bold text-white">{awayScore}</span>
         </div>
         
         <div className="mt-4 grid grid-cols-3 gap-2">
-          <button className="bg-secondary hover:bg-betting hover:text-betting-foreground transition-colors p-2 rounded text-center">
-            <div className="font-bold">{(1 + Math.random() * 4).toFixed(2)}</div>
-            <div className="text-xs text-muted-foreground">1</div>
+          <button className="bg-gray-700 hover:bg-indigo-600 hover:text-white transition-colors p-2 rounded text-center">
+            <div className="font-bold text-white">{(1 + Math.random() * 4).toFixed(2)}</div>
+            <div className="text-xs text-gray-400">1</div>
           </button>
           
-          <button className="bg-secondary hover:bg-betting hover:text-betting-foreground transition-colors p-2 rounded text-center">
-            <div className="font-bold">{(3 + Math.random() * 2).toFixed(2)}</div>
-            <div className="text-xs text-muted-foreground">X</div>
+          <button className="bg-gray-700 hover:bg-indigo-600 hover:text-white transition-colors p-2 rounded text-center">
+            <div className="font-bold text-white">{(3 + Math.random() * 2).toFixed(2)}</div>
+            <div className="text-xs text-gray-400">X</div>
           </button>
           
-          <button className="bg-secondary hover:bg-betting hover:text-betting-foreground transition-colors p-2 rounded text-center">
-            <div className="font-bold">{(1 + Math.random() * 4).toFixed(2)}</div>
-            <div className="text-xs text-muted-foreground">2</div>
+          <button className="bg-gray-700 hover:bg-indigo-600 hover:text-white transition-colors p-2 rounded text-center">
+            <div className="font-bold text-white">{(1 + Math.random() * 4).toFixed(2)}</div>
+            <div className="text-xs text-gray-400">2</div>
           </button>
         </div>
         
-        <button className="w-full mt-2 text-xs text-center text-muted-foreground hover:text-foreground">
+        <button className="w-full mt-2 text-xs text-center text-gray-500 hover:text-white">
           +{100 + Math.floor(Math.random() * 200)} more markets
         </button>
       </div>

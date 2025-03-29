@@ -30,11 +30,11 @@ const Odds = ({ value, label }: OddsProps) => {
   return (
     <CustomButton 
       variant="outline" 
-      className="flex-1 h-14 flex flex-col items-center justify-center gap-1 hover:border-betting hover:text-betting"
+      className="flex-1 h-14 flex flex-col items-center justify-center gap-1 hover:border-indigo-500 hover:text-indigo-500 border-gray-700"
       onClick={handleOddsClick}
     >
-      <span className="font-bold">{value.toFixed(2)}</span>
-      <span className="text-xs text-muted-foreground">{label}</span>
+      <span className="font-bold text-white">{value.toFixed(2)}</span>
+      <span className="text-xs text-gray-400">{label}</span>
     </CustomButton>
   );
 };
@@ -63,9 +63,9 @@ const MatchCard = ({
   isLive = false,
 }: MatchCardProps) => {
   return (
-    <CustomCard className="overflow-hidden">
+    <CustomCard className="overflow-hidden bg-gray-800 border-gray-700">
       {isFeatured && (
-        <div className="bg-betting px-4 py-1 text-xs font-medium text-betting-foreground flex items-center justify-between">
+        <div className="bg-indigo-600 px-4 py-1 text-xs font-medium text-white flex items-center justify-between">
           <span>Featured Match</span>
           <StarIcon className="h-3 w-3" />
         </div>
@@ -73,15 +73,15 @@ const MatchCard = ({
       
       <div className="p-4">
         <div className="flex justify-between items-center mb-3">
-          <span className="text-xs text-muted-foreground">{league}</span>
+          <span className="text-xs text-gray-400">{league}</span>
           <div className="flex items-center text-xs">
             {isLive ? (
               <div className="flex items-center">
-                <span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1 animate-pulse-opacity"></span>
+                <span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1 animate-pulse"></span>
                 <span className="text-red-500 font-medium">LIVE</span>
               </div>
             ) : (
-              <div className="flex items-center text-muted-foreground">
+              <div className="flex items-center text-gray-400">
                 <ClockIcon className="h-3 w-3 mr-1" />
                 <span>{time}</span>
               </div>
@@ -89,7 +89,7 @@ const MatchCard = ({
           </div>
         </div>
         
-        <h3 className="font-medium text-foreground">
+        <h3 className="font-medium text-white">
           {homeTeam} vs {awayTeam}
         </h3>
         
@@ -99,7 +99,7 @@ const MatchCard = ({
           <Odds value={awayOdds} label={awayTeam} />
         </div>
         
-        <CustomButton variant="ghost" className="w-full mt-2 text-xs text-muted-foreground hover:text-foreground">
+        <CustomButton variant="ghost" className="w-full mt-2 text-xs text-gray-500 hover:text-white">
           +42 more markets
         </CustomButton>
       </div>

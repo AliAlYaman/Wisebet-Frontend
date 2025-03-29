@@ -11,7 +11,7 @@ interface GameCardProps {
 
 const GameCard = ({ name, category, imgUrl, hot }: GameCardProps) => {
   return (
-    <CustomCard className="overflow-hidden group cursor-pointer">
+    <CustomCard className="overflow-hidden group cursor-pointer bg-gray-800 border-gray-700">
       <div className="relative aspect-[4/3] overflow-hidden">
         <img 
           src={imgUrl} 
@@ -26,8 +26,8 @@ const GameCard = ({ name, category, imgUrl, hot }: GameCardProps) => {
         )}
       </div>
       <CustomCardContent className="p-3">
-        <h3 className="font-medium text-sm">{name}</h3>
-        <span className="text-xs text-muted-foreground">{category}</span>
+        <h3 className="font-medium text-sm text-white">{name}</h3>
+        <span className="text-xs text-gray-400">{category}</span>
       </CustomCardContent>
     </CustomCard>
   );
@@ -37,8 +37,8 @@ const CasinoPreview = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold">Casino Games</h2>
-        <CustomButton variant="link" className="text-betting flex items-center gap-1">
+        <h2 className="text-xl font-bold text-white">Casino Games</h2>
+        <CustomButton variant="link" className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
           View Casino <ArrowRightIcon className="h-4 w-4" />
         </CustomButton>
       </div>

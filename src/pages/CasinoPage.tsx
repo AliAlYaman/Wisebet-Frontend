@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { SearchIcon, FlameIcon, StarIcon, ClockIcon } from "../components/common/SportsIcons";
 
 // Custom simple tabs
@@ -22,7 +23,7 @@ interface TabsListProps {
 
 const TabsList: React.FC<TabsListProps> = ({ className, children }) => {
   return (
-    <div className={`bg-background flex rounded-md p-1 ${className}`}>
+    <div className={`bg-gray-800 flex rounded-md p-1 ${className}`}>
       {children}
     </div>
   );
@@ -36,7 +37,7 @@ interface TabsTriggerProps {
 const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children }) => {
   return (
     <button 
-      className="px-3 py-1.5 text-sm font-medium rounded-md data-[state=active]:bg-betting data-[state=active]:text-betting-foreground transition-colors"
+      className="px-3 py-1.5 text-sm font-medium rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white transition-colors text-gray-300 hover:text-white cursor-pointer"
       data-state="inactive"
     >
       {children}
@@ -56,13 +57,13 @@ const Badge: React.FC<BadgeProps> = ({
   children, 
   className = '' 
 }) => {
-  const baseStyles = "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2";
+  const baseStyles = "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2";
   
   const variantStyles = {
-    default: "border-transparent bg-primary text-primary-foreground",
-    secondary: "border-transparent bg-secondary text-secondary-foreground",
-    destructive: "border-transparent bg-destructive text-destructive-foreground",
-    outline: "text-foreground"
+    default: "border-transparent bg-indigo-600 text-white",
+    secondary: "border-transparent bg-gray-700 text-gray-300",
+    destructive: "border-transparent bg-red-600 text-white",
+    outline: "text-gray-300 border border-gray-600"
   };
   
   return (
@@ -80,7 +81,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 const Input: React.FC<InputProps> = ({ className, ...props }) => {
   return (
     <input
-      className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+      className={`flex h-10 w-full rounded-md border border-gray-700 bg-gray-800 text-white px-3 py-2 text-sm ring-offset-gray-900 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
       {...props}
     />
   );
@@ -94,7 +95,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ className = '', children }) => {
   return (
-    <div className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`}>
+    <div className={`rounded-lg border border-gray-700 bg-gray-800 text-white shadow-sm ${className}`}>
       {children}
     </div>
   );
@@ -114,15 +115,18 @@ const CardContent: React.FC<CardContentProps> = ({ className = '', children }) =
 };
 
 const CasinoPage = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
+
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-900">
       <div className="container px-4 py-8 mx-auto space-y-8">
         <div>
-          <h1 className="text-3xl font-bold mb-6">Casino Games</h1>
+          <h1 className="text-3xl font-bold mb-6 text-white">Casino Games</h1>
           
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 mb-6">
             <Tabs defaultValue="all" className="w-full md:w-auto">
-              <TabsList className="bg-background">
+              <TabsList className="bg-gray-800">
                 <TabsTrigger value="all">All Games</TabsTrigger>
                 <TabsTrigger value="slots">Slots</TabsTrigger>
                 <TabsTrigger value="liveCasino">Live Casino</TabsTrigger>
@@ -131,13 +135,30 @@ const CasinoPage = () => {
               </TabsList>
             </Tabs>
             
-            <div className="relative w-full md:w-80">
-              <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input
-                type="search"
-                placeholder="Search games..."
-                className="pl-10 bg-secondary border-none w-full h-10 text-sm focus:outline-none"
-              />
+            <div className={`relative w-full md:w-96 transition-all duration-200 ${searchFocused ? 'md:w-[28rem]' : ''}`}>
+              <div className={`absolute inset-0 rounded-lg bg-gradient-to-r from-indigo-500/20 to-purple-500/20 opacity-0 transition-opacity duration-200 ${searchFocused ? 'opacity-100' : ''}`}></div>
+              <div className={`relative flex items-center border ${searchFocused ? 'border-indigo-400' : 'border-gray-700'} rounded-lg bg-gray-800 transition-all duration-200`}>
+                <SearchIcon className={`ml-3 h-5 w-5 transition-colors duration-200 ${searchFocused ? 'text-indigo-400' : 'text-gray-400'}`} />
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setSearchFocused(true)}
+                  onBlur={() => setSearchFocused(false)}
+                  placeholder="Search games..."
+                  className="w-full py-2.5 px-3 bg-transparent text-white placeholder-gray-500 focus:outline-none text-sm"
+                />
+                {searchQuery && (
+                  <button 
+                    onClick={() => setSearchQuery('')}
+                    className="mr-2 p-1 rounded-full text-gray-400 hover:text-white transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
           
@@ -151,7 +172,7 @@ const CasinoPage = () => {
               Featured
             </Badge>
             <Badge variant="secondary" className="cursor-pointer flex items-center gap-1">
-              <ClockIcon className="h-3 w-3" />
+              <ClockIcon className="h-3 w-3 text-gray-400" />
               New
             </Badge>
             <Badge variant="secondary" className="cursor-pointer">Jackpots</Badge>
@@ -198,8 +219,8 @@ const CasinoGameCard = ({ index }: CasinoGameCardProps) => {
   const isFeatured = index % 11 === 0;
   
   return (
-    <Card className="overflow-hidden group cursor-pointer hover:shadow-md transition-shadow">
-      <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
+    <Card className="overflow-hidden group cursor-pointer hover:shadow-lg transition-shadow">
+      <div className="relative aspect-[4/3] overflow-hidden bg-gray-700">
         <img
           src={`https://picsum.photos/seed/${index + 100}/300/225`}
           alt={gameName}
@@ -227,8 +248,8 @@ const CasinoGameCard = ({ index }: CasinoGameCardProps) => {
         </div>
       </div>
       <CardContent className="p-3">
-        <h3 className="font-medium text-sm truncate">{gameName}</h3>
-        <span className="text-xs text-muted-foreground">{category}</span>
+        <h3 className="font-medium text-sm truncate text-white">{gameName}</h3>
+        <span className="text-xs text-gray-400">{category}</span>
       </CardContent>
     </Card>
   );

@@ -6,8 +6,8 @@ const FeaturedMatches = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold">Featured Matches</h2>
-        <CustomButton variant="link" className="text-betting flex items-center gap-1">
+        <h2 className="text-xl font-bold text-white">Featured Matches</h2>
+        <CustomButton variant="link" className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
           View All <ArrowRightIcon className="h-4 w-4" />
         </CustomButton>
       </div>
