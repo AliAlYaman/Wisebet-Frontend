@@ -1,12 +1,41 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthProvider';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+  const { isAuthenticated, isLoading, logout, checkAuthState } = useAuth(); // Add checkAuthState
+
+
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      // Force a re-check of auth state after logout
+      await checkAuthState();
+      setMobileMenuOpen(false);
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Even if logout API fails, ensure UI updates
+      await checkAuthState();
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <header className="sticky top-0 z-50 bg-gray-900 border-b border-gray-800">
+        <div className="container px-4 mx-auto">
+          <div className="flex items-center justify-between h-16">
+            <div className="animate-pulse h-8 w-32 bg-gray-700 rounded"></div>
+            <div className="animate-pulse h-8 w-8 bg-gray-700 rounded-full"></div>
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-gray-900 border-b border-gray-800">
@@ -31,27 +60,51 @@ const Header = () => {
             <Link to="/predictions" className="px-3 py-2 text-sm font-medium text-white hover:text-indigo-400 transition-colors">
               Predictions
             </Link>
+            {isAuthenticated && (
+              <Link to="/account" className="px-3 py-2 text-sm font-medium text-white hover:text-indigo-400 transition-colors">
+                My Account
+              </Link>
+            )}
           </nav>
 
           {/* Search and User Controls */}
           <div className="flex items-center space-x-4">
             <div className="hidden md:flex items-center space-x-2">
-              <Link 
-                to="/login" 
-                className="px-3 py-2 text-sm font-medium text-white hover:text-indigo-400 transition-colors cursor-pointer"
-              >
-                Login
-              </Link>
-              <Link 
-                to="/register" 
-                className="px-3 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors cursor-pointer"
-              >
-                Register
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to="/account"
+                    className="px-3 py-2 text-sm font-medium text-white hover:text-indigo-400 transition-colors cursor-pointer"
+                  >
+                    Account
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="px-3 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors cursor-pointer"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="px-3 py-2 text-sm font-medium text-white hover:text-indigo-400 transition-colors cursor-pointer"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="px-3 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors cursor-pointer"
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
             </div>
-            
+
             {/* Mobile menu button */}
-            <button 
+            <button
               className="md:hidden text-gray-400 hover:text-white focus:outline-none"
               onClick={toggleMobileMenu}
             >
@@ -68,7 +121,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Mobile Navigation Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-gray-900 border-b border-gray-800">
@@ -76,50 +129,71 @@ const Header = () => {
             <div className="flex items-center relative mb-4">
               {/* Mobile search input would go here */}
             </div>
-            
+
             <nav className="space-y-1 pb-3">
-              <Link 
-                to="/" 
+              <Link
+                to="/"
                 className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-800"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Sports
               </Link>
-              <Link 
-                to="/live" 
+              <Link
+                to="/live"
                 className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-800"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Live
               </Link>
-              <Link 
-                to="/casino" 
+              <Link
+                to="/casino"
                 className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-800"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Casino
               </Link>
-              <Link 
-                to="/promotions" 
+              <Link
+                to="/predictions"
                 className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-800"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Promotions
+                Predictions
               </Link>
-              <Link 
-                to="/login" 
-                className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-800"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Login
-              </Link>
-              <Link 
-                to="/register" 
-                className="block px-3 py-2 rounded-md text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Register
-              </Link>
+
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to="/account"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-800"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    My Account
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-white bg-red-600 hover:bg-red-700"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-800"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
             </nav>
           </div>
         </div>

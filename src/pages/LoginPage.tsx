@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { login } from "../services/api/login";
+import { login } from "../services/api/auth/login";
 
 const LoginPage = () => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -19,7 +17,7 @@ const LoginPage = () => {
 
     try {
       await login(formData);
-      navigate("/dashboard"); // Redirect to dashboard after successful login
+      window.location.href = '/'; // This does a full page load // Redirect after successful login
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed");
     } finally {

@@ -8,8 +8,10 @@ import NotFound from "./pages/NotFound";
 import MainLayout from "./layouts/MainLayout";
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/Register';
+import { AuthProvider } from './context/AuthProvider';
 
 const App = () => (
+      <AuthProvider>
   <BrowserRouter>
     <Routes>
       <Route element={<MainLayout />}>
@@ -22,6 +24,7 @@ const App = () => (
       <Route path="*" element={<NotFound />} />
     </Routes>
   </BrowserRouter>
+      </AuthProvider>
 );
 
 export default App;

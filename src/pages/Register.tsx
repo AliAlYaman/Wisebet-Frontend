@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { register } from '../services/api/register';
+import { Link } from 'react-router-dom';
+import { register } from '../services/api/auth/register';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -10,7 +10,7 @@ const RegisterPage = () => {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,7 +33,7 @@ const RegisterPage = () => {
         password: formData.password,
         password_confirmation: formData.confirmPassword
       });
-      navigate("/");
+      window.location.href = '/';
     } catch (error) {
       setError("Registration failed. Please try again.");
     }

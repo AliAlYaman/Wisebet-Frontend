@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "../api";
 
 interface RegisterData {
   user_name: string;
@@ -9,10 +9,11 @@ interface RegisterData {
 
 export const register = async (data: RegisterData) => {
   try {
+
     const response = await api.post("/register", data);
-    const token = response.data.token;
+    localStorage.setItem("api_token", response.data.token);
     console.log("Registration successful:", response.data);
-    localStorage.setItem("token", token);
+  
     return response;
   } catch (error) {
     console.error("Registration failed:", error);
