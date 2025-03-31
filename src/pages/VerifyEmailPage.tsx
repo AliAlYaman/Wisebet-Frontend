@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { verifyEmail } from '../services/api/auth/verifyEmail';
+import { verifyEmail } from '../services/api/auth/emails/verifyEmail';
 
 const VerifyEmailPage = () => {
   const [isVerifying, setIsVerifying] = useState(false);
@@ -11,8 +11,8 @@ const VerifyEmailPage = () => {
 
   useEffect(() => {
     const query = searchParams.get('verification_url');
-    const verificationUrl =query?.substring(query.indexOf('/email:'));
-    
+    const verificationUrl = query?.substring(query.indexOf('/email:'));
+
     if (!verificationUrl) {
       setError('Invalid verification link.');
       return;
@@ -28,9 +28,9 @@ const VerifyEmailPage = () => {
   }, [searchParams, navigate]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-secondary">
-      <div className="bg-white p-8 shadow-lg rounded-lg max-w-md w-full">
-        <h2 className="text-2xl font-bold text-center mb-4">Email Verification</h2>
+    <div className="bg-gray-900 flex items-center justify-center min-h-screen bg-secondary">
+      <div className="bg-gray-800 p-8 shadow-lg rounded-lg max-w-md w-full">
+        <h2 className="text-2xl font-bold text-center mb-4 text-white">Email Verification</h2>
 
         {isVerified ? (
           <div className="text-center">

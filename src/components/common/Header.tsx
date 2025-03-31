@@ -60,11 +60,6 @@ const Header = () => {
             <Link to="/predictions" className="px-3 py-2 text-sm font-medium text-white hover:text-indigo-400 transition-colors">
               Predictions
             </Link>
-            {isAuthenticated && (
-              <Link to="/account" className="px-3 py-2 text-sm font-medium text-white hover:text-indigo-400 transition-colors">
-                My Account
-              </Link>
-            )}
           </nav>
 
           {/* Search and User Controls */}

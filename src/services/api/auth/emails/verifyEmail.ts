@@ -1,4 +1,4 @@
-import api from "../api";
+import api from "../../api";
 import { NavigateFunction } from "react-router-dom";
 
 interface VerifyEmailParams {
@@ -19,9 +19,9 @@ export const verifyEmail = async ({
   setIsVerifying(true);
   try {
     const response = await api.get(verificationUrl, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('api_token')}`
-        }
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("api_token")}`,
+      },
     });
 
     if (response.data.success) {
