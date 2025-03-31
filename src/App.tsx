@@ -1,30 +1,38 @@
 import './App.css'
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/MainPage";
-import LivePage from "./pages/LivePage";
-import CasinoPage from "./pages/CasinoPage";
-import NotFound from "./pages/NotFound";
-import MainLayout from "./layouts/MainLayout";
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/Register';
 import { AuthProvider } from './context/AuthProvider';
+import { lazy, Suspense } from 'react';
 
-const App = () => (
-      <AuthProvider>
-  <BrowserRouter>
-    <Routes>
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<Index />} />
-        <Route path="/live" element={<LivePage />} />
-        <Route path="/casino" element={<CasinoPage />} />
-      </Route>
-      <Route path='/login' element={<LoginPage/>} />
-      <Route path='/register' element={<RegisterPage/>} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </BrowserRouter>
-      </AuthProvider>
-);
+// Lazy load your pages
+const Main = lazy(() => import('./layouts/MainLayout'));
+const Index = lazy(() => import('./pages/MainPage'));
+const Live = lazy(() => import('./pages/LivePage'));
+const Login = lazy(() => import('./pages/LoginPage'));
+const Casino = lazy(() => import('./pages/CasinoPage'));
+const Register = lazy(() => import('./pages/Register'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+const VerifyEmail = lazy(() => import('./pages/VerifyEmailPage'));
+
+function App() {
+  return (
+    <AuthProvider>
+    <BrowserRouter>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route element={<Main />}>
+            <Route path="/" element={<Index />} />
+            <Route path="/live" element={<Live />} />
+            <Route path="/casino" element={<Casino />} />
+          </Route>
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/email-verification' element={<VerifyEmail />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+    </AuthProvider>
+  );
+}
 
 export default App;
