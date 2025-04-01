@@ -1,6 +1,6 @@
 import { CustomButton } from "../common/CustomButton";
 import { CustomCard, CustomCardContent } from "../common/CustomCard";
-import { ArrowRightIcon, ClockIcon, StarIcon } from "../common/SportsIcons";
+import { ArrowRightIcon } from "../common/SportsIcons";
 
 // Custom tabs implementation
 interface TabsProps {
@@ -9,7 +9,7 @@ interface TabsProps {
   children: React.ReactNode;
 }
 
-const Tabs: React.FC<TabsProps> = ({ defaultValue, className, children }) => {
+const Tabs: React.FC<TabsProps> = ({ className, children }) => {
   return (
     <div className={className}>
       {children}
@@ -35,7 +35,7 @@ interface TabsTriggerProps {
   children: React.ReactNode;
 }
 
-const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children }) => {
+const TabsTrigger: React.FC<TabsTriggerProps> = ({ children }) => {
   return (
     <button 
       className="px-3 py-1.5 text-sm font-medium rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white transition-colors text-gray-300 hover:text-white cursor-pointer"
