@@ -14,7 +14,7 @@ import {
 } from "../common/SportsIcons";
 
 // Simple custom tabs implementation
-const CustomTabs = ({ value, onValueChange, children, className }: any) => {
+const CustomTabs = ({ children, className }: any) => {
   return (
     <div className={className}>
       {children}

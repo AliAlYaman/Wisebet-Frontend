@@ -124,7 +124,7 @@ const TwoFactorSection = () => {
                 </p>
                 <div className="bg-white p-4 rounded-lg flex justify-center">
   {totpUri ? (
-    <div dangerouslySetInnerHTML={{ __html: totpUri }} />
+   <img src={totpUri} alt="Scan QR Code" />
   ) : (
     <div className="w-40 h-40 flex items-center justify-center text-gray-500">
       Loading QR code...
