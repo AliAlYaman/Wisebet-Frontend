@@ -19,3 +19,13 @@ export const login = async (data: LoginData) => {
     throw error;
   }
 };
+
+export const googleLogin = async (credential: string): Promise<void> => {
+  const response = await api.post('/auth/google', { token: credential });
+
+  if (response.data.token) {
+    localStorage.setItem('api_token', response.data.token);
+  } else {
+    throw new Error('Google login failed');
+  }
+};
