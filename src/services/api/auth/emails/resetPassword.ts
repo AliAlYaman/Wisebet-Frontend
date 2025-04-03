@@ -10,7 +10,11 @@ type ResetPasswordParams = {
 
 export const requestPasswordReset = async (email: string) => {
   try {
-    const response = await api.post("/forgot-password", { email });
+    const response = await api.post("/forgot-password", { email } , {
+      headers: {
+        Authorization : `Bearer ${localStorage.getItem('api_token')}`
+      }
+    });
     return {
       success: true,
       message: response.data.message || `Password reset link sent to ${email}`,

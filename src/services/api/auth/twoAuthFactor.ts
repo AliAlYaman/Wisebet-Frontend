@@ -1,26 +1,8 @@
 import api from "../api";
 
-export const twoFactorQR = async () => {
-  try {
-
-    const response = await api.get("/user/two-factor-qr-code", {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('api_token')}`
-        }
-    });
-    console.log(response.data);
-
-    return response;
-  } catch (error: any) {
-    console.error("QR code failed:", error.response?.data || error.message);
-    throw error;
-  }
-};
-
-
 export const enable2FA = async () => {
   try {
-    const response = await api.post("user/two-factor-authentication", {},{
+    const response = await api.post("/enable-2fa", {},{
         headers: {
             Authorization: `Bearer ${localStorage.getItem('api_token')}`
         }
@@ -37,7 +19,7 @@ export const enable2FA = async () => {
 
 export const disable2FA = async () => {
   try {
-    const response = await api.delete("user/two-factor-authentication", {
+    const response = await api.delete("/user/two-factor-authentication", {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('api_token')}`
         }
@@ -52,14 +34,13 @@ export const disable2FA = async () => {
 };
 
 
-export const verify2FA = async (code : any) => {
+export const verify2FA = async (code : string) => {
   try {
-    const response = await api.post("/two-factor-challenge",  code , {
-        headers : {
-            Authorization: `Bearer ${localStorage.getItem('api_token')}`
-        }
-    }
-    );
+    const response = await api.post("/verify-2fa",  {code} ,{
+      headers: {
+          Authorization: `Bearer ${localStorage.getItem('api_token')}`
+      }
+  });
 
     console.log(response.data);
 

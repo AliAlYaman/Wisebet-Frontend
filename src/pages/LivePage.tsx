@@ -31,7 +31,7 @@ interface TabsTriggerProps {
   children: React.ReactNode;
 }
 
-const TabsTrigger: React.FC<TabsTriggerProps> = ({ children }) => {
+const TabsTrigger: React.FC<TabsTriggerProps> = ({children }) => {
   return (
     <button 
       className="px-3 py-1.5 text-sm font-medium rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white transition-colors text-gray-300 hover:text-white cursor-pointer"
@@ -112,10 +112,6 @@ const LiveEventCard = ({ index }: LiveEventCardProps) => {
   } else if (sport === "Tennis") {
     homeScore = Math.floor(Math.random() * 3);
     awayScore = Math.floor(Math.random() * 3);
-    // const sets = homeScore > awayScore 
-    //   ? `${homeScore}-${awayScore}` 
-    //   : `${awayScore}-${homeScore}`;
-    // time = `Set ${Math.min(homeScore, awayScore) + 1}`;
   } else {
     homeScore = Math.floor(Math.random() * 4);
     awayScore = Math.floor(Math.random() * 4);

@@ -8,7 +8,8 @@ interface AuthContextType {
   isLoading: boolean;
   login: (credentials: { email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
-  checkAuthState: () => Promise<void>; // Add this new function
+  checkAuthState: () => Promise<void>;
+  loginWithGoogle: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,12 +18,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Extract the auth check logic into a reusable function
   const verifyAuth = async () => {
     try {
       const authenticated = await checkAuth();
       setIsAuthenticated(authenticated);
-    } catch (error) {
+    } catch {
       setIsAuthenticated(false);
     } finally {
       setIsLoading(false);
@@ -37,7 +37,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(true);
     try {
       await login(credentials);
-      // Immediately verify auth state after login
       await verifyAuth();
     } finally {
       setIsLoading(false);
@@ -54,16 +53,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const loginWithGoogle = () => {
+    const width = 500, height = 600;
+    const left = (window.innerWidth - width) / 2;
+    const top = (window.innerHeight - height) / 2;
+
+    const popup = window.open(
+      `${process.env.REACT_APP_API_URL}/auth/google/redirect`,
+      'Google Sign-In',
+      `width=${width},height=${height},top=${top},left=${left}`
+    );
+
+    const interval = setInterval(() => {
+      if (popup?.closed) {
+        clearInterval(interval);
+        verifyAuth();
+      }
+    }, 1000);
+  };
+
+  useEffect(() => {
+    const receiveMessage = async (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+      if (event.data.token) {
+        localStorage.setItem('api_token', event.data.token);
+        await verifyAuth();
+      }
+    };
+
+    window.addEventListener('message', receiveMessage);
+    return () => window.removeEventListener('message', receiveMessage);
+  }, []);
+
   return (
-    <AuthContext.Provider
-      value={{
-        isAuthenticated,
-        isLoading,
-        login: handleLogin,
-        logout: handleLogout,
-        checkAuthState: verifyAuth, // Expose the verifyAuth function
-      }}
-    >
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, login: handleLogin, logout: handleLogout, checkAuthState: verifyAuth, loginWithGoogle }}>
       {children}
     </AuthContext.Provider>
   );
@@ -71,7 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;

@@ -19,3 +19,13 @@ export const register = async (data: RegisterData) => {
     console.error("Registration failed:", error);
   }
 };
+
+export const googleRegister = async (credential: string): Promise<void> => {
+  const response = await api.post('/auth/google', { token: credential });
+
+  if (response.data.token) {
+    localStorage.setItem('api_token', response.data.token);
+  } else {
+    throw new Error('Google sign up failed');
+  }
+};

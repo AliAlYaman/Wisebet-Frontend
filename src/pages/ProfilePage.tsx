@@ -3,7 +3,7 @@
 import { useState } from "react"
 import ProfileSection from "../components/sections/ProfileSection"
 import SecuritySection from "../components/sections/SecuritySection"
-import TwoFactorSection from "../components/sections/TwoFactorSection"
+// import TwoFactorSection from "../components/sections/TwoFactorSection"
 import DangerZoneSection from "../components/sections/DangerZoneSection"
 import { useNavigate } from 'react-router-dom';
 
@@ -59,7 +59,7 @@ const AccountPage = () => {
       <div className="space-y-6">
         <ProfileSection user={user} updateProfile={updateProfile} />
         <SecuritySection />
-        <TwoFactorSection />
+        {/* <TwoFactorSection /> */}
         <DangerZoneSection />
       </div>
     </div>
