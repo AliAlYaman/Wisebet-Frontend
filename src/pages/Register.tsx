@@ -1,6 +1,10 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import { register } from '../services/api/auth/register';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { googleRegister } from '../services/api/auth/register';
+import { useAuth } from '../context/AuthProvider';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -10,7 +14,8 @@ const RegisterPage = () => {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
-
+  const { checkAuthState } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,7 +31,6 @@ const RegisterPage = () => {
     }
 
     try {
-      console.log(formData)
       await register({
         user_name: formData.user_name,
         email: formData.email,
@@ -39,130 +43,145 @@ const RegisterPage = () => {
     }
   };
 
+  const handleGoogleSuccess = async (credentialResponse: any) => {
+    try {
+      if (credentialResponse.credential) {
+        await googleRegister(credentialResponse.credential);
+        await checkAuthState();
+        window.location.href= '/';
+      } else {
+        setError("Google registration failed - no credential received");
+      }
+    } catch (err: any) {
+      setError(err.message || "Google registration failed");
+    }
+  };
+
+  const handleGoogleError = () => setError("Google registration failed");
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-md mx-auto bg-gray-800 rounded-lg overflow-hidden shadow-lg">
-          <div className="p-8">
-            <div className="mb-4">
-              <Link to="/" className="inline-flex items-center text-indigo-400 hover:text-indigo-300 text-sm font-medium">
-                <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Back to Home
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || ""}>
+      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+        <div className="max-w-md w-full bg-gray-800 rounded-lg shadow-lg p-8 relative">
+          <button onClick={() => navigate('/')} className="absolute top-4 left-4 text-gray-400 hover:text-white">
+            <FaArrowLeft size={20} />
+          </button>
+
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-indigo-500">Create account</h2>
+            <p className="text-gray-400 mt-2">Join us today</p>
+          </div>
+
+          {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
+
+          <div className="mt-6 flex justify-center">
+            <GoogleLogin 
+              onSuccess={handleGoogleSuccess} 
+              onError={handleGoogleError} 
+              text="signup_with" 
+              shape="rectangular" 
+              size="large" 
+              width="300" 
+            />
+          </div>
+
+          <div className="flex items-center my-6">
+            <div className="flex-grow border-t border-gray-600"></div>
+            <span className="mx-4 text-gray-400">or</span>
+            <div className="flex-grow border-t border-gray-600"></div>
+          </div>
+
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div>
+              <label htmlFor="user_name" className="block text-sm text-gray-300">Username</label>
+              <input
+                id="user_name"
+                name="user_name"
+                type="text"
+                required
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-md text-white"
+                placeholder="yourusername"
+                value={formData.user_name}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm text-gray-300">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-md text-white"
+                placeholder="your@email.com"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm text-gray-300">Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-md text-white"
+                placeholder="••••••••"
+                value={formData.password}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm text-gray-300">Confirm Password</label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                required
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-md text-white"
+                placeholder="••••••••"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="flex items-center">
+              <input
+                id="terms"
+                name="terms"
+                type="checkbox"
+                className="h-4 w-4 cursor-pointer text-indigo-600 border-gray-600 rounded bg-gray-700"
+                required
+              />
+              <label htmlFor="terms" className="ml-2 block text-sm text-gray-300">
+                I agree to the <Link to="/terms" className="text-indigo-400 hover:text-indigo-300">Terms and Conditions</Link>
+              </label>
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                className="w-full py-3 bg-indigo-600 rounded-md hover:bg-indigo-700 text-white"
+              >
+                Create account
+              </button>
+            </div>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-400">
+              Already have an account?{' '}
+              <Link to="/login" className="font-medium text-indigo-400 hover:text-indigo-300">
+                Sign in
               </Link>
-            </div>
-
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-indigo-500">Create account</h2>
-              <p className="text-gray-400 mt-2">Join us today</p>
-            </div>
-
-            {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div>
-                <label htmlFor="user_name" className="block text-sm font-medium text-gray-300 mb-1">
-                  Username
-                </label>
-                <input
-                  id="user_name"
-                  name="user_name"
-                  type="text"
-                  required
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
-                  placeholder="yourusername"
-                  value={formData.user_name}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
-                  placeholder="your@email.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-1">
-                  Confirm Password
-                </label>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white"
-                  placeholder="••••••••"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="flex items-center">
-                <input
-                  id="terms"
-                  name="terms"
-                  type="checkbox"
-                  className="h-4 w-4 cursor-pointer text-indigo-600 focus:ring-indigo-500 border-gray-600 rounded bg-gray-700"
-                  required
-                />
-                <label htmlFor="terms" className="ml-2 block text-sm text-gray-300">
-                  I agree to the <Link to="/terms" className="text-indigo-400 hover:text-indigo-300">Terms and Conditions</Link>
-                </label>
-              </div>
-
-              <div>
-                <button
-                  type="submit"
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer"
-                >
-                  Create account
-                </button>
-              </div>
-            </form>
-
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-400">
-                Already have an account?{' '}
-                <Link to="/login" className="font-medium text-indigo-400 hover:text-indigo-300">
-                  Sign in
-                </Link>
-              </p>
-            </div>
+            </p>
           </div>
         </div>
       </div>
-    </div>
+    </GoogleOAuthProvider>
   );
 };
 

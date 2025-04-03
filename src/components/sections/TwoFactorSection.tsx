@@ -17,8 +17,8 @@ const TwoFactorSection = () => {
     try {
       setLoading(true)
       const response = await enable2FA()
-      setTotpUri(response.data.qr_code) // Should be something like "otpauth://totp/..."
-      setSecret(response.data.secret)
+      setTotpUri(response?.data.qr_code) // Should be something like "otpauth://totp/..."
+      setSecret(response?.data.secret)
     } catch (error) {
       setMessage({ text: "Failed to setup 2FA. Please try again.", type: "error" })
       console.error(error)
@@ -53,7 +53,7 @@ const TwoFactorSection = () => {
 
     try {
       const response = await verify2FA(verificationCode)
-      if (response.data.verified) {
+      if (response?.data.verified) {
         setTwoFactorEnabled(true)
         setShowSetup(false)
         setMessage({ text: "Two-factor authentication enabled", type: "success" })
@@ -123,14 +123,14 @@ const TwoFactorSection = () => {
                   Scan this QR code with your authenticator app:
                 </p>
                 <div className="bg-white p-4 rounded-lg flex justify-center">
-  {totpUri ? (
-   <img src={totpUri} alt="Scan QR Code" />
-  ) : (
-    <div className="w-40 h-40 flex items-center justify-center text-gray-500">
-      Loading QR code...
-    </div>
-  )}
-</div>
+                  {totpUri ? (
+                    <img src={totpUri} alt="Scan QR Code" />
+                  ) : (
+                    <div className="w-40 h-40 flex items-center justify-center text-gray-500">
+                      Loading QR code...
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div>
