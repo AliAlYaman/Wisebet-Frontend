@@ -1,6 +1,11 @@
 import { CustomButton } from "../common/CustomButton";
-import { CustomCard, CustomCardContent } from "../common/CustomCard";
+import { CustomCard } from "../common/CustomCard";
 import { ArrowRightIcon } from "../common/SportsIcons";
+import { getLiveMatches } from '../../services/api/sports/live'; // Adjust path as needed
+import type { LiveMatch } from '../../services/api/sports/types';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import LiveEventCard from "../common/LiveEventCard";
 
 // Custom tabs implementation
 interface TabsProps {
@@ -37,7 +42,7 @@ interface TabsTriggerProps {
 
 const TabsTrigger: React.FC<TabsTriggerProps> = ({ children }) => {
   return (
-    <button 
+    <button
       className="px-3 py-1.5 text-sm font-medium rounded-md data-[state=active]:bg-indigo-600 data-[state=active]:text-white transition-colors text-gray-300 hover:text-white cursor-pointer"
       data-state="inactive"
     >
@@ -47,6 +52,24 @@ const TabsTrigger: React.FC<TabsTriggerProps> = ({ children }) => {
 };
 
 const LiveEvents = () => {
+  const [liveMatches, setLiveMatches] = useState<LiveMatch[]>([]);
+
+  useEffect(() => {
+    const fetchLiveData = async () => {
+      try {
+        const matches = await getLiveMatches();
+        setLiveMatches(matches.slice(0,3));
+      } catch (error) {
+        console.error("Failed to fetch live matches:", error);
+      } 
+    };
+
+    fetchLiveData();
+    const intervalId = setInterval(fetchLiveData, 30000); // Refresh every 30 seconds
+
+    return () => clearInterval(intervalId); // Cleanup interval on unmount
+  }, []);
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -56,11 +79,13 @@ const LiveEvents = () => {
             <span>Live Events</span>
           </div>
         </h2>
+        <Link to={'live'}>
         <CustomButton variant="link" className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
           View All <ArrowRightIcon className="h-4 w-4" />
         </CustomButton>
+        </Link>
       </div>
-      
+
       <Tabs defaultValue="all" className="w-full">
         <TabsList className="bg-gray-800">
           <TabsTrigger value="all">All</TabsTrigger>
@@ -70,35 +95,18 @@ const LiveEvents = () => {
           <TabsTrigger value="esports">Esports</TabsTrigger>
         </TabsList>
       </Tabs>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <LiveEventCard 
-          homeTeam="Arsenal" 
-          awayTeam="Tottenham" 
-          homeScore={2}
-          awayScore={1}
-          time="64'"
-          league="Premier League"
-        />
-        
-        <LiveEventCard 
-          homeTeam="Bayern Munich" 
-          awayTeam="Dortmund" 
-          homeScore={3}
-          awayScore={2}
-          time="78'"
-          league="Bundesliga"
-        />
-        
-        <LiveEventCard 
-          homeTeam="Lakers" 
-          awayTeam="Warriors" 
-          homeScore={87}
-          awayScore={82}
-          time="Q3 8:24"
-          league="NBA"
-          isBasketball={true}
-        />
+        {liveMatches.map((match) => (
+          <LiveEventCard
+            homeTeam={match.homeTeam}
+            awayTeam={match.awayTeam}
+            homeScore={parseInt(match.score.split('-')[0])}
+            awayScore={parseInt(match.score.split('-')[1])}
+            time={match.matchTime}
+            league={match.league}
+          />
+        ))}
       </div>
     </div>
   );
@@ -113,78 +121,4 @@ interface LiveEventCardProps {
   league: string;
   isBasketball?: boolean;
 }
-
-const LiveEventCard = ({
-  homeTeam,
-  awayTeam,
-  homeScore,
-  awayScore,
-  time,
-  league,
-  isBasketball = false,
-}: LiveEventCardProps) => {
-  return (
-    <CustomCard className="overflow-hidden bg-gray-800 border-gray-700">
-      <div className="p-4">
-        <div className="flex justify-between items-center mb-3">
-          <span className="text-xs text-gray-400">{league}</span>
-          <div className="flex items-center">
-            <div className="flex items-center">
-              <span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1 animate-pulse"></span>
-              <span className="text-xs text-red-500 font-medium">LIVE</span>
-            </div>
-            <span className="text-xs text-gray-400 ml-2">{time}</span>
-          </div>
-        </div>
-        
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <span className="font-medium text-white">{homeTeam}</span>
-          </div>
-          <span className="text-xl font-bold text-white">{homeScore}</span>
-        </div>
-        
-        <div className="flex justify-between items-center mt-2">
-          <div className="flex items-center">
-            <span className="font-medium text-white">{awayTeam}</span>
-          </div>
-          <span className="text-xl font-bold text-white">{awayScore}</span>
-        </div>
-        
-        <CustomCardContent className="p-0 mt-4">
-          <div className="grid grid-cols-3 gap-2">
-          <CustomButton 
-              variant="outline" 
-              className="h-12 flex flex-col items-center justify-center gap-1 hover:bg-indigo-600 hover:border-indigo-600 hover:text-white border-gray-700 transition-all"
-            >
-              <span className="font-bold text-white group-hover:text-white">1.95</span>
-              <span className="text-xs text-gray-400 group-hover:text-white/80">1</span>
-            </CustomButton>
-            
-            <CustomButton 
-              variant="outline" 
-              className="h-12 flex flex-col items-center justify-center gap-1 hover:bg-indigo-600 hover:border-indigo-600 hover:text-white border-gray-700 transition-all"
-            >
-              <span className="font-bold text-white group-hover:text-white">3.40</span>
-              <span className="text-xs text-gray-400 group-hover:text-white/80">X</span>
-            </CustomButton>
-            
-            <CustomButton 
-              variant="outline" 
-              className="h-12 flex flex-col items-center justify-center gap-1 hover:bg-indigo-600 hover:border-indigo-600 hover:text-white border-gray-700 transition-all"
-            >
-              <span className="font-bold text-white group-hover:text-white">4.20</span>
-              <span className="text-xs text-gray-400 group-hover:text-white/80">2</span>
-            </CustomButton>
-          </div>
-          
-          <CustomButton variant="ghost" className="w-full mt-2 text-xs text-gray-500 hover:text-white">
-            +{isBasketball ? 180 : 250} more markets
-          </CustomButton>
-        </CustomCardContent>
-      </div>
-    </CustomCard>
-  );
-};
-
 export default LiveEvents;
